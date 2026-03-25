@@ -1,6 +1,6 @@
 {
   "name": "trevec",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Universal Context Graph for AI Agents — persistent memory with user isolation, sub-50ms retrieval",
   "main": "dist/entry.js",
   "types": "dist/index.d.ts",

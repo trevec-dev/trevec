@@ -4,7 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "trevec"
-version = "0.1.1"
+version = "0.1.2"
 description = "Universal Context Graph for AI Agents — fast, structured code context retrieval"
 readme = "../../sdks/python/README.md"
 license = "Apache-2.0"
