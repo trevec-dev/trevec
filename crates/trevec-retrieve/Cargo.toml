@@ -1,0 +1,19 @@
+[package]
+name = "trevec-retrieve"
+description = "Hybrid retrieval and context assembly for Trevec"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+trevec-core = { workspace = true }
+trevec-index = { workspace = true }
+petgraph = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

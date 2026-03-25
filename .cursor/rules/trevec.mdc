@@ -1,0 +1,34 @@
+---
+description: Trevec MCP tools for code context retrieval and episodic memory
+globs:
+alwaysApply: true
+---
+
+# Trevec MCP Tools
+
+Use these MCP tools to retrieve precise, graph-aware code context instead of reading files manually.
+
+## Tools
+
+### get_context
+Retrieves relevant code context for a natural-language query. Returns relevant code nodes with file paths, spans, and related context. **Use this as your primary tool for understanding code.**
+
+### search_code
+Hybrid search over indexed code nodes. Returns ranked results with file paths and signatures. Use for targeted symbol or keyword lookup.
+
+### read_file_topology
+Returns the structural topology of a file: all code nodes (functions, classes, methods) with their relationships (calls, imports, contains). Use to understand file structure before making changes.
+
+### remember_turn
+Records a conversation turn into episodic memory. Call this when the user shares important context, decisions, or preferences that should persist across sessions.
+
+### recall_history
+Searches episodic memory for past conversation context. Use when the user references previous discussions or when historical context would help answer a question.
+
+## Guidelines
+
+- Prefer `get_context` over reading raw files — it returns only the relevant code with graph context.
+- Use `search_code` for quick symbol lookups (function names, class names, error messages).
+- Use `read_file_topology` before modifying a file to understand its structure and dependencies.
+- Call `remember_turn` for important decisions, preferences, or context the user shares.
+- Call `recall_history` when the user says "we discussed", "last time", or references prior work.

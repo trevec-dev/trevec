@@ -1,0 +1,42 @@
+[package]
+name = "trevec-parse"
+description = "AST parsing and code extraction for Trevec"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+trevec-core = { workspace = true }
+tree-sitter = { workspace = true }
+ignore = { workspace = true }
+blake3 = { workspace = true }
+streaming-iterator = "0.1"
+tracing = { workspace = true }
+anyhow = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+regex = { workspace = true }
+
+# Tree-sitter language grammars
+tree-sitter-rust = "0.23"
+tree-sitter-python = "0.23.6"
+tree-sitter-javascript = "0.23.1"
+tree-sitter-typescript = "0.23"
+tree-sitter-go = "0.23.4"
+tree-sitter-java = "0.23"
+tree-sitter-c = "0.23.4"
+tree-sitter-cpp = "0.23"
+tree-sitter-ruby = "0.23"
+tree-sitter-bash = "0.23.3"
+tree-sitter-json = "0.24"
+tree-sitter-html = "0.23"
+tree-sitter-css = "0.23.2"
+tree-sitter-c-sharp = "0.23"
+tree-sitter-lua = "0.2.0"
+tree-sitter-zig = "1"
+tree-sitter-swift = "0.7"
+
+[dev-dependencies]
+tempfile = { workspace = true }

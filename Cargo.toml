@@ -1,0 +1,98 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/trevec-core",
+    "crates/trevec-parse",
+    "crates/trevec-index",
+    "crates/trevec-retrieve",
+    "crates/trevec-brain",
+    "crates/trevec-sdk",
+    "crates/trevec-python",
+    "crates/trevec-node",
+    "crates/trevec-cli",
+]
+
+[workspace.package]
+version = "2.0.0"
+edition = "2021"
+authors = ["Ibrahim Wynters"]
+license = "Apache-2.0"
+repository = "https://github.com/trevec-dev/trevec"
+homepage = "https://trevec.dev"
+keywords = ["code-search", "ast", "retrieval", "mcp", "developer-tools"]
+categories = ["development-tools", "command-line-utilities"]
+
+[workspace.dependencies]
+# Internal crates
+trevec-core = { path = "crates/trevec-core" }
+trevec-parse = { path = "crates/trevec-parse" }
+trevec-index = { path = "crates/trevec-index" }
+trevec-retrieve = { path = "crates/trevec-retrieve" }
+
+# Tree-sitter
+tree-sitter = "0.24"
+
+# Storage & search
+lancedb = "0.27"
+arrow-array = "57"
+arrow-schema = "57"
+
+# Embeddings
+fastembed = "5"
+
+# Graph
+petgraph = "0.7"
+
+# Parallelism
+rayon = "1"
+
+# Hashing
+blake3 = "1"
+
+# Secret scrubbing
+regex = "1"
+
+# SQLite (Cursor extraction)
+rusqlite = { version = "0.32", features = ["bundled"] }
+
+# File watching
+notify = "7"
+
+# File walking
+ignore = "0.4"
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# MCP server
+rmcp = { version = "0.14", features = ["server", "transport-io"] }
+schemars = "1"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+bincode = "1"
+
+# HTTP client (telemetry)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+# Async
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Error handling
+anyhow = "1"
+
+# Testing
+tempfile = "3"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true

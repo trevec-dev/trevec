@@ -1,0 +1,14 @@
+pub mod doctor;
+pub mod index;
+pub mod init;
+pub mod inspect;
+pub mod memory;
+pub mod projects;
+pub mod query;
+pub mod rules;
+pub mod serve;
+pub mod setup;
+pub mod stats;
+pub mod telemetry_cmd;
+pub mod update;
+pub mod watch;

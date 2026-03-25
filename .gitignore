@@ -1,0 +1,43 @@
+/target
+.trevec/
+.fastembed_cache/
+*.swp
+*.swo
+.DS_Store
+dist/
+benchmarks/
+__pycache__/
+.env
+
+# IDE / MCP configs (contain local paths)
+.claude/
+.mcp.json
+.codex/
+.cursor/mcp.json
+
+# SWE-bench evaluation result files
+anthropic__*.json
+
+# Build helpers
+build.bat
+
+# Logs
+logs/
+
+sdks/python/trevec.egg-info/
+sdks/python/dist/
+sdks/python/build/
+target/wheels/
+sdks/node/node_modules/
+sdks/node/dist/
+sdks/node/node_modules/
+sdks/node/dist/
+sdks/node-native/node_modules/
+sdks/node-native/*.node
+crates/trevec-node/*.node
+crates/trevec-node/false
+sdks/node-native/*.node
+sdks/node/native/*.node
+target-node/
+crates/trevec-node/index.js
+crates/trevec-node/index.d.ts

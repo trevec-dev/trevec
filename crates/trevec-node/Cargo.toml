@@ -1,0 +1,23 @@
+[package]
+name = "trevec-node"
+description = "Native Node.js bindings for Trevec via napi-rs"
+version.workspace = true
+edition.workspace = true
+homepage.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+trevec-core = { workspace = true }
+trevec-parse = { workspace = true }
+trevec-brain = { path = "../trevec-brain" }
+trevec-sdk = { path = "../trevec-sdk" }
+napi = { version = "3", features = ["napi10", "tokio_rt"] }
+napi-derive = "3"
+serde_json = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+
+[build-dependencies]
+napi-build = "2"

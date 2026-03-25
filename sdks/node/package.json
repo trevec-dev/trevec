@@ -1,0 +1,33 @@
+{
+  "name": "trevec",
+  "version": "0.3.1",
+  "description": "Universal Context Graph for AI Agents — persistent memory with user isolation, sub-50ms retrieval",
+  "main": "dist/entry.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "native"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "ai", "agents", "memory", "context", "retrieval",
+    "code", "graph", "mcp", "rag", "llm", "langchain", "crewai", "rust", "native"
+  ],
+  "author": "Ibrahim Wynters <hello@trevec.dev>",
+  "license": "Apache-2.0",
+  "homepage": "https://trevec.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trevec-dev/trevec"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.0.0"
+  }
+}

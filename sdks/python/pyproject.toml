@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trevec"
+version = "0.0.1"
+description = "Universal Context Graph for AI Agents — fast, structured code context retrieval"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Ibrahim Wynters", email = "hello@trevec.dev"},
+]
+keywords = ["ai", "agents", "memory", "context", "retrieval", "code", "graph", "mcp", "rag"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Rust",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://trevec.dev"
+Repository = "https://github.com/trevec-dev/trevec"
+Documentation = "https://docs.trevec.dev"

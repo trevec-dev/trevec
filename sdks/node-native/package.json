@@ -1,0 +1,28 @@
+{
+  "name": "trevec-native",
+  "version": "0.1.0",
+  "description": "Native Trevec bindings for Node.js via napi-rs (Rust-powered)",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "napi": {
+    "binaryName": "trevec",
+    "targets": [
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "aarch64-apple-darwin"
+    ]
+  },
+  "scripts": {
+    "build": "napi build --platform --release --manifest-path ../../crates/trevec-node/Cargo.toml"
+  },
+  "keywords": ["trevec", "ai", "agents", "memory", "napi", "rust", "native"],
+  "author": "Ibrahim Wynters <hello@trevec.dev>",
+  "license": "Apache-2.0",
+  "homepage": "https://trevec.dev",
+  "devDependencies": {
+    "@napi-rs/cli": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
