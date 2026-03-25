@@ -42,9 +42,9 @@ Trevec is a **local-first, Rust-powered context engine** that gives AI agents st
 │                      Trevec Engine                              │
 │                                                                 │
 │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │  Tree-sitter │  │   LanceDB    │  │   Universal Context    │ │
-│  │  AST Parser  │  │ Hybrid Search│  │       Graph            │ │
-│  │  17 languages│  │  <50ms P95   │  │  5 domains · 23 edges  │ │
+│  │  Language-   │  │   Hybrid     │  │   Universal Context    │ │
+│  │  Aware       │  │   Search     │  │       Graph            │ │
+│  │  AST Parser  │  │  <50ms P95   │  │  5 domains · 23 edges  │ │
 │  └─────────────┘  └──────────────┘  └────────────────────────┘ │
 │                                                                 │
 │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
@@ -102,10 +102,10 @@ Traditional RAG treats code like a PDF — flat text chunks with keyword matchin
 Traditional RAG                          Trevec
 ─────────────                            ──────
 Flat text chunks                         AST-aware nodes (functions, classes, modules)
-Keyword matching only                    Graph traversal (imports → calls → inheritance)
+Keyword matching only                    Structural graph traversal
 Minutes to re-index                      Millisecond incremental updates
 Siloed file reads                        Cross-module relationship mapping
-Cloud embedding APIs                     100% local (zero egress)
+Cloud APIs required                      100% local (zero egress)
 ```
 
 ### vs. Cloud Memory SDKs
@@ -137,25 +137,23 @@ Real-world test: *"How does the planner agent work?"* on a 50K LoC codebase.
 
 ## How It Works
 
-Trevec uses a three-layer architecture:
-
 ```
  Query: "How does authentication work?"
                     │
                     ▼
  ┌──────────────────────────────────┐
- │  1. PARSE                        │   Tree-sitter AST extraction
+ │  1. PARSE                        │   Language-aware AST extraction
  │                                  │   Functions, classes, modules → nodes
  │  auth.rs ──→ [login()] [verify()]│   Imports, calls, inheritance → edges
- │  user.rs ──→ [User] [Session]   │   Deterministic, language-aware
+ │  user.rs ──→ [User] [Session]   │   17 languages supported
  └──────────────┬───────────────────┘
                 │
                 ▼
  ┌──────────────────────────────────┐
- │  2. RETRIEVE                     │   Full-text + semantic search
- │                                  │   Hybrid ranking algorithm
- │  login() ──── 0.92              │   Ranked by structure + meaning
- │  verify() ─── 0.87              │   All local, sub-50ms
+ │  2. RETRIEVE                     │   Hybrid search across the graph
+ │                                  │   Ranked by structure + meaning
+ │  login() ──── 0.92              │   All local, sub-50ms
+ │  verify() ─── 0.87              │
  │  Session ──── 0.71              │
  └──────────────┬───────────────────┘
                 │
@@ -163,7 +161,7 @@ Trevec uses a three-layer architecture:
  ┌──────────────────────────────────┐
  │  3. ASSEMBLE                     │   Graph-aware context expansion
  │                                  │   Follows imports, calls, inheritance
- │  login() + verify() + Session   │   Smart budget management
+ │  login() + verify() + Session   │   Budget-managed output
  │  + their imports & callers      │   File paths, line ranges, citations
  └──────────────────────────────────┘
                 │
@@ -176,7 +174,7 @@ Trevec uses a three-layer architecture:
 
 Trevec runs as an [MCP](https://modelcontextprotocol.io/) server, giving AI assistants structured access to your codebase and memory.
 
-**Supported tools:** Claude Code, Cursor, Windsurf, Zed, VS Code, Claude Desktop, Codex
+**Works with:** Claude Code · Cursor · Windsurf · Zed · VS Code · Claude Desktop · Codex
 
 ```bash
 trevec mcp setup    # one-time global config for all IDEs
@@ -199,14 +197,14 @@ This writes a simple config — no hardcoded paths:
 
 | Tool | Description |
 |------|-------------|
-| **`get_context`** | Primary retrieval — returns relevant source code with file paths, line ranges, and graph relationships |
+| **`get_context`** | Primary retrieval — returns relevant source code with file paths, line ranges, and relationships |
 | **`search_code`** | Quick symbol lookup — find functions, classes, patterns across the codebase |
 | **`read_file_topology`** | Inspect structure — who calls a function, what a module imports, what inherits from a base |
 | **`remember_turn`** | Save to memory — debugging sessions, architecture decisions, code reviews |
 | **`recall_history`** | Search memory — find past discussions relevant to current work |
 | **`summarize_period`** | Recap — bullet-point summary of work within a time range |
 | **`get_file_history`** | File context — prior discussions, bugs, and decisions for a specific file |
-| **`repo_summary`** | Codebase overview — languages, modules, entry points, hotspots, conventions |
+| **`repo_summary`** | Codebase overview — languages, modules, entry points, conventions |
 | **`neighbor_signatures`** | Dependency surface — type signatures of imports for a set of files |
 | **`batch_context`** | Multi-query — run up to 10 context queries in a single call |
 | **`reindex`** | Refresh — re-index when results seem stale or after major changes |
@@ -312,7 +310,7 @@ Trevec doesn't just index code. The **Universal Context Graph** unifies code, co
 └─────────┘                         └───────────┘
 ```
 
-**5 domains** · **26 node kinds** · **23 edge types** — from `Import` and `Call` to `ExpressedPreference`, `DecidedOn`, and `PredictedCall`.
+**5 domains** · **26 node kinds** · **23 edge types** — a unified graph across code, conversations, documents, and more.
 
 ## Brain
 
@@ -320,9 +318,9 @@ The **Brain** is Trevec's optional async intelligence layer. It enriches the gra
 
 | Worker | What It Does |
 |--------|-------------|
-| **Intent Summarizer** | Generates structured summaries — purpose, inputs, outputs, side effects, error cases |
-| **Entity Resolver** | Deduplicates entities across domains using multi-signal similarity |
-| **Link Predictor** | Predicts missing edges from usage patterns |
+| **Intent Summarizer** | Generates structured summaries of code — purpose, inputs, outputs, side effects |
+| **Entity Resolver** | Deduplicates entities across domains |
+| **Link Predictor** | Predicts missing relationships from usage patterns |
 | **Observation Agent** | Watches code changes, generates observations and reflections |
 
 ```python
@@ -343,7 +341,7 @@ Try Trevec without installing anything at **[playground.trevec.dev](https://play
 
 Rust · Python · JavaScript · TypeScript · Go · Java · C · C++ · C# · Ruby · Swift · Bash · Lua · Zig · JSON · HTML · CSS
 
-17 languages via Tree-sitter, with more coming.
+17 languages with more coming.
 
 ## CLI Commands
 
@@ -371,9 +369,6 @@ exclude = ["vendor/**", "*.generated.*"]
 [retrieval]
 anchors = 5       # number of seed results for context assembly
 budget = 4096     # token budget for context output
-
-[embeddings]
-model = "BAAI/bge-small-en-v1.5"
 ```
 
 All settings are optional with sensible defaults.
@@ -393,9 +388,9 @@ cargo build --release
 trevec/
 ├── crates/
 │   ├── trevec-core        # Data model, Universal Context Graph types
-│   ├── trevec-parse       # Tree-sitter extraction, domain parsers
-│   ├── trevec-index       # LanceDB indexing, graph building, memory
-│   ├── trevec-retrieve    # Hybrid search, ranking, graph expansion
+│   ├── trevec-parse       # Language-aware AST extraction, domain parsers
+│   ├── trevec-index       # Indexing pipeline, graph building, memory store
+│   ├── trevec-retrieve    # Hybrid search, ranking, context expansion
 │   ├── trevec-brain       # Async LLM enrichment (optional)
 │   ├── trevec-sdk         # Unified Rust SDK (TrevecEngine)
 │   ├── trevec-python      # Python bindings (PyO3)
@@ -411,8 +406,7 @@ trevec/
 ### Running Tests
 
 ```bash
-cargo test --workspace                   # 97 tests
-cargo test --workspace -- --ignored      # + tests requiring embedding model
+cargo test --workspace
 ```
 
 ## Contributing
