@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="https://trevec.dev/trevec-icon.png" alt="Trevec" width="80" />
-</p>
-
 <h1 align="center">Trevec</h1>
 
 <p align="center">
@@ -18,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://playground.trevec.dev"><strong>Try the Playground</strong></a> · <a href="https://docs.trevec.dev">Docs</a> · <a href="#use-case-1-mcp-server-for-your-ide">MCP Server</a> · <a href="#use-case-2-sdk-for-your-ai-apps">SDK</a>
+  <a href="https://trevec.dev">Website</a> · <a href="https://playground.trevec.dev"><strong>Try the Playground</strong></a> · <a href="https://docs.trevec.dev">Docs</a> · <a href="#use-case-1-mcp-server-for-your-ide">MCP Server</a> · <a href="#use-case-2-sdk-for-your-ai-apps">SDK</a>
 </p>
 
 ---
