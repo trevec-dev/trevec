@@ -43,12 +43,12 @@ Trevec is a **local-first, Rust-powered context engine** that gives AI agents st
 │                                                                 │
 │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
 │  │  Tree-sitter │  │   LanceDB    │  │   Universal Context    │ │
-│  │  AST Parser  │  │  BM25+Vector │  │       Graph            │ │
+│  │  AST Parser  │  │ Hybrid Search│  │       Graph            │ │
 │  │  17 languages│  │  <50ms P95   │  │  5 domains · 23 edges  │ │
 │  └─────────────┘  └──────────────┘  └────────────────────────┘ │
 │                                                                 │
 │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────────┐ │
-│  │  Episodic   │  │    Brain     │  │  Token-Budgeted        │ │
+│  │  Episodic   │  │    Brain     │  │  Graph-Aware           │ │
 │  │  Memory     │  │  (async LLM) │  │  Context Assembly      │ │
 │  └─────────────┘  └──────────────┘  └────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
@@ -144,26 +144,26 @@ Trevec uses a three-layer architecture:
                     │
                     ▼
  ┌──────────────────────────────────┐
- │  1. PARSE — Structural Layer     │   Tree-sitter AST extraction
+ │  1. PARSE                        │   Tree-sitter AST extraction
  │                                  │   Functions, classes, modules → nodes
  │  auth.rs ──→ [login()] [verify()]│   Imports, calls, inheritance → edges
- │  user.rs ──→ [User] [Session]   │   Deterministic, no guessing
+ │  user.rs ──→ [User] [Session]   │   Deterministic, language-aware
  └──────────────┬───────────────────┘
                 │
                 ▼
  ┌──────────────────────────────────┐
- │  2. RETRIEVE — Hybrid Search     │   BM25 full-text + vector embeddings
- │                                  │   Reciprocal Rank Fusion merging
- │  login() ──── 0.92              │   Results ranked by structure + meaning
+ │  2. RETRIEVE                     │   Full-text + semantic search
+ │                                  │   Hybrid ranking algorithm
+ │  login() ──── 0.92              │   Ranked by structure + meaning
  │  verify() ─── 0.87              │   All local, sub-50ms
  │  Session ──── 0.71              │
  └──────────────┬───────────────────┘
                 │
                 ▼
  ┌──────────────────────────────────┐
- │  3. ASSEMBLE — Context Bundle    │   Select top anchor nodes
- │                                  │   Expand graph neighborhood
- │  login() + verify() + Session   │   Token-budgeted assembly
+ │  3. ASSEMBLE                     │   Graph-aware context expansion
+ │                                  │   Follows imports, calls, inheritance
+ │  login() + verify() + Session   │   Smart budget management
  │  + their imports & callers      │   File paths, line ranges, citations
  └──────────────────────────────────┘
                 │
@@ -321,8 +321,8 @@ The **Brain** is Trevec's optional async intelligence layer. It enriches the gra
 | Worker | What It Does |
 |--------|-------------|
 | **Intent Summarizer** | Generates structured summaries — purpose, inputs, outputs, side effects, error cases |
-| **Entity Resolver** | Deduplicates entities using Jaro-Winkler + cosine + co-occurrence similarity |
-| **Link Predictor** | Predicts missing edges from co-occurrence patterns |
+| **Entity Resolver** | Deduplicates entities across domains using multi-signal similarity |
+| **Link Predictor** | Predicts missing edges from usage patterns |
 | **Observation Agent** | Watches code changes, generates observations and reflections |
 
 ```python
@@ -369,8 +369,8 @@ After `trevec init`, edit `.trevec/config.toml`:
 exclude = ["vendor/**", "*.generated.*"]
 
 [retrieval]
-anchors = 5       # anchor nodes for context assembly
-budget = 4096     # token budget for context assembly
+anchors = 5       # number of seed results for context assembly
+budget = 4096     # token budget for context output
 
 [embeddings]
 model = "BAAI/bge-small-en-v1.5"
@@ -395,7 +395,7 @@ trevec/
 │   ├── trevec-core        # Data model, Universal Context Graph types
 │   ├── trevec-parse       # Tree-sitter extraction, domain parsers
 │   ├── trevec-index       # LanceDB indexing, graph building, memory
-│   ├── trevec-retrieve    # Hybrid search, RRF, graph expansion
+│   ├── trevec-retrieve    # Hybrid search, ranking, graph expansion
 │   ├── trevec-brain       # Async LLM enrichment (optional)
 │   ├── trevec-sdk         # Unified Rust SDK (TrevecEngine)
 │   ├── trevec-python      # Python bindings (PyO3)
